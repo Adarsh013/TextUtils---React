@@ -1,33 +1,75 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+// import About from "./components/About";
+import Alert from "./components/Alert";
+import Navbar from "./components/Navbar";
+import Textform from "./components/Textform";
+// import About from './components/About';
 
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
+  const [mode, setMode] = useState("light"); //whether dark mode is enable or not
+  const [alert, setalert] = useState(null);
+
+  const showAlert = (message, type) => {
+    setalert({
+      msg: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setalert(null);
+    }, 2000);
+  };
+
+  const toggleMode = () => {
+    if (mode === "light") {
+      setMode("dark");
+      document.body.style.backgroundColor = "black";
+      document.body.style.color = "white";
+      showAlert("Dark mode has been enabled", "success");
+      document.title = "TextUtils - Dark mode";
+
+      // setInterval(() => {
+      //   document.title = "Download TextUtils Right Now"
+      // }, 2000);
+      // setInterval(() => {
+      //   document.title = "Please Download text utils right now"
+      // }, 1500);
+    } else {
+      setMode("light");
+      document.body.style.backgroundColor = "white";
+      showAlert("Light mode has been enabled", "success");
+      document.title = "TextUtils - Light mode";
+    }
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-  <div className="container-fluid">
-    <a className="navbar-brand" href="/">Textutils</a>
-    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon"></span>
-    </button>
-    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-        <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="/">Home</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/">About</a>
-        </li>
-        </ul>
-      <form className="d-flex" role="search">
-        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button className="btn btn-outline-success" type="submit">Search</button>
-      </form>
-      
-    </div>
-  </div>
-</nav>
+    <>
+      {/* <Navbar title="TextUtils" AboutText="About" AboutSearch="Search"/> */}
+      {/* For Understanding defaultProps */}
+      {/* { <Navbar/> } */}
+
+      {/* <Router> */}
+        <Navbar title="TextUtils" mode={mode} toggleMode={toggleMode} />
+        <Alert alert={alert} />
+        <div className="container my-3">
+          {/* <Routes> */}
+
+{/* using "exact" is a good practice so that react will look for the exact match not similar */}
+            {/* <Route exact path="/about" element={<About />} />
+            <Route exact path="/"
+              element={
+                <Textform showAlert={showAlert} Heading="Enter text for Testing" mode={mode} />
+              }
+            />
+          </Routes> */}
+
+          <Textform showAlert={showAlert} Heading="Enter text for Testing" mode={mode} />
+          {/* <About/> */}
+        </div>
+      {/* </Router> */}
+    </>
   );
 }
 
